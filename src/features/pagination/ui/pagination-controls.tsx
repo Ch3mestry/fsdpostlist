@@ -60,7 +60,7 @@ export function PaginationControls({
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="h-8 w-8 p-0"
+        className="h-8 w-8 p-0 cursor-pointer disabled:cursor-not-allowed"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -71,7 +71,7 @@ export function PaginationControls({
             key={index}
             variant="outline"
             size="sm"
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 cursor-default"
             disabled
           >
             <MoreHorizontal className="h-4 w-4" />
@@ -81,7 +81,7 @@ export function PaginationControls({
             key={index}
             variant={currentPage === page ? "default" : "outline"}
             size="sm"
-            className="h-8 w-8 p-0"
+            className="h-8 w-8 p-0 cursor-pointer disabled:cursor-not-allowed"
             onClick={() => onPageChange(page as number)}
           >
             {page}
@@ -94,7 +94,7 @@ export function PaginationControls({
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="h-8 w-8 p-0"
+        className="h-8 w-8 p-0 cursor-pointer disabled:cursor-not-allowed"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>
