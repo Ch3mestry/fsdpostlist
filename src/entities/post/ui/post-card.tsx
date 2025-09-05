@@ -71,7 +71,6 @@ export function PostCard({ post }: PostCardProps) {
           <span>User: {post.userId}</span>
         </div>
 
-        {/* Секция комментариев */}
         <CommentSection postId={post.id} />
       </CardContent>
     </Card>

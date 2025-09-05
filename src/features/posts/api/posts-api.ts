@@ -43,6 +43,33 @@ export const postsApi = {
     }
   },
 
+  // Получение фотографии для конкретного поста
+  async getPhotoForPost(postId: number): Promise<string> {
+    try {
+      // В JSONPlaceholder albumId соответствует postId
+      const response = await fetch(
+        `${BASE_URL}/photos?albumId=${postId}&_limit=1`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const photos = await response.json();
+      
+      // Если найдены фотографии, возвращаем URL первой
+      if (photos.length > 0) {
+        return photos[0].url;
+      }
+      
+      // Fallback: если фото не найдено, используем случайное изображение
+      return `https://picsum.photos/600/400?random=${postId}`;
+    } catch (error) {
+      console.error(`Failed to fetch photo for post ${postId}:`, error);
+      return `https://picsum.photos/600/400?random=${postId}`;
+    }
+  },
+
   // Получение постов с изображениями с пагинацией
   async getPostsWithImages(params?: PaginationParams): Promise<{
     posts: PostWithImage[];
@@ -54,10 +81,16 @@ export const postsApi = {
         this.getTotalPostsCount(),
       ]);
 
-      const postsWithImages = posts.map((post) => ({
-        ...post,
-        imageUrl: `https://picsum.photos/600/400?random=${post.id}`,
-      }));
+      // Создаем массив промисов для получения фото для каждого поста
+      const postsWithImagesPromises = posts.map(async (post) => {
+        const imageUrl = await this.getPhotoForPost(post.id);
+        return {
+          ...post,
+          imageUrl,
+        };
+      });
+
+      const postsWithImages = await Promise.all(postsWithImagesPromises);
 
       return {
         posts: postsWithImages,

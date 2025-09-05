@@ -1,32 +1,19 @@
+// next.config.js
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    domains: ['via.placeholder.com', 'picsum.photos'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'jsonplaceholder.typicode.com',
-        port: '',
-        pathname: '/**',
+        hostname: 'via.placeholder.com',
       },
       {
         protocol: 'https',
         hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
-        port: '',
-        pathname: '/**',
       },
     ],
   },
-  // Добавляем logging для debug
-  logging: {
-    fetches: {
-      fullUrl: true,
-    },
-  },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

@@ -35,15 +35,10 @@ export function CommentSection({ postId }: CommentSectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const queryClient = useQueryClient();
 
-  const {
-    data: comments,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["comments", postId],
-    queryFn: () => commentApi.getCommentsByPostId(postId),
-    enabled: isExpanded,
-  });
+const { data: comments, isLoading, error } = useQuery({
+  queryKey: ["comments", postId],
+  queryFn: () => commentApi.getCommentsByPostId(postId),
+});
 
   const {
     register,
@@ -68,7 +63,6 @@ export function CommentSection({ postId }: CommentSectionProps) {
       return commentApi.createComment(commentDto);
     },
     onMutate: async (newComment) => {
-      // Оптимистичное обновление
       await queryClient.cancelQueries({ queryKey: ["comments", postId] });
 
       const previousComments = queryClient.getQueryData<Comment[]>([
@@ -100,7 +94,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
       reset();
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      // queryClient.invalidateQueries({ queryKey: ["comments", postId] });
     },
   });
 
@@ -159,7 +153,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
             </div>
           )}
 
-          {comments && <CommentList comments={comments} />}
+          {comments && <CommentList comments={comments} isLoading={isLoading} />}
         </div>
       )}
     </div>
